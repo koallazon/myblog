@@ -1,5 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 import firebaseConfig from './firebaseConfig'
+
 export default {
     mode: 'universal',
     /*
@@ -52,13 +53,17 @@ export default {
                     firestore: true
                 }
             }
-        ]
+        ],
+        '@nuxtjs/markdownit'
     ],
     /*
      ** Axios module configuration
      ** See https://axios.nuxtjs.org/options
      */
     axios: {},
+    markdownit: {
+        injected: true
+    },
     /*
      ** vuetify module configuration
      ** https://github.com/nuxt-community/vuetify-module
@@ -66,7 +71,7 @@ export default {
     vuetify: {
         customVariables: ['~/assets/variables.scss'],
         theme: {
-            dark: true,
+            dark: false,
             themes: {
                 dark: {
                     primary: colors.blue.darken2,

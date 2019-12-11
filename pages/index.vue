@@ -1,24 +1,29 @@
 <template>
   <v-container fluid>
     <v-card>
-      {{ items }}
+      <v-card-text>
+        <v-textarea v-model="str" />
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-text v-html="$md.render(str)" style="white-space:pre" />
     </v-card>
   </v-container>
 </template>
 
 <script>
+import readMe from '../README.md'
 export default {
   data () {
     return {
-      items: []
+      items: [],
+      str: ''
     }
   },
-  async mounted () {
-    const sn = await this.$fireStore.collection('test').get()
-    sn.docs.forEach((v) => {
-      console.log(v.data())
-      this.items.push(v.data())
-    })
+  coumputed: {
+    hello () {
+      return readMe
+    }
   }
 }
 </script>
