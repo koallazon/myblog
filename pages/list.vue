@@ -22,6 +22,14 @@
                 </v-list-item-action>
               </v-list-item>
             </v-card-text>
+            <v-radio-group v-model="radioGroup">
+              <v-radio
+                v-for="n in 3"
+                :key="n"
+                :label="`Radio ${n}`"
+                :value="n"
+              ></v-radio>
+            </v-radio-group>
         </v-card>
     </v-container>
 </template>
@@ -30,7 +38,8 @@
 export default {
   data () {
     return {
-      items: []
+      items: [],
+      radioGroup: 1
     }
   },
   mounted () {
