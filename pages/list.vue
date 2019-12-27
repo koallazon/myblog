@@ -35,16 +35,18 @@
                 <v-divider :key="i" />
               </template>
             </v-card-text>
-          <v-card-actions>
-            <v-btn @click="next" text>
-              more
+          <v-card v-intersect="onIntersect" class="text-center m-b-xs" flat>
+            <v-btn @click="onIntersect" :loading="loading">
+              More
             </v-btn>
-          </v-card-actions>
+          </v-card>
         </v-card>
     </v-container>
 </template>
 
 <script>
+import delay from 'delay'
+
 export default {
   data () {
     return {
@@ -77,7 +79,9 @@ export default {
       })
       this.last = sn.docs[sn.docs.length - 1]
     },
-    async next () {
+    async onIntersect (entries, observer, isIntersection) {
+      this.loading = true
+      await delay(1500)
       const sn = await this.$fireStore.collection('docs')
         .orderBy(this.sortName, 'desc')
         .startAfter(this.last)
@@ -91,6 +95,7 @@ export default {
         this.items.push(item)
       })
       this.last = sn.docs[sn.docs.length - 1]
+      this.loading = false
     }
   }
 }
