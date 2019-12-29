@@ -2,7 +2,7 @@
     <v-container>
         <v-card>
             <v-toolbar color="success" dark flat>
-                <v-toolbar-title>list</v-toolbar-title>
+                <v-toolbar-title>list {{ items.length }}</v-toolbar-title>
                 <v-spacer />
                 <v-sheet width="100" color="transparent">
                   <v-select
@@ -14,15 +14,12 @@
                     >
                   </v-select>
                 </v-sheet>
-                <v-btn icon @click="list">
-                    <v-icon>mdi-refresh</v-icon>
-                </v-btn>
             </v-toolbar>
             <v-card-text>
               <template v-for="(item, i) in items">
                 <v-list-item :key="item.id" three-line>
                   <v-list-item-content>
-                    <v-list-item-title>{{item.title}}</v-list-item-title>
+                    <v-list-item-title>{{ i+' '+item.title}}</v-list-item-title>
                     <v-list-item-subtitle>{{item.description}}</v-list-item-subtitle>
                     <v-list-item-subtitle>{{item.date}}</v-list-item-subtitle>
                   </v-list-item-content>
@@ -35,67 +32,66 @@
                 <v-divider :key="i" />
               </template>
             </v-card-text>
-          <v-card v-intersect="onIntersect" class="text-center m-b-xs" flat>
-            <v-btn @click="onIntersect" :loading="loading">
-              More
-            </v-btn>
-          </v-card>
+            <v-card-action v-intersect="onIntersect">
+              <v-btn @click="next" text :loading="loading">
+                More
+              </v-btn>
+            </v-card-action>
         </v-card>
     </v-container>
 </template>
 
 <script>
-import delay from 'delay'
-
 export default {
   data () {
     return {
       items: [],
       last: null,
-      sortName: 'date'
+      sortName: 'date',
+      loading: false
     }
   },
   watch: {
     sortName () {
-      this.list()
     }
   },
   mounted () {
-    this.list()
   },
   methods: {
-    async list () {
-      this.items = []
-      const sn = await this.$fireStore.collection('docs')
+    async next () {
+      const ref = this.$fireStore.collection('docs')
         .orderBy(this.sortName, 'desc')
         .limit(3)
-        .get()
-      sn.docs.forEach((v) => {
-        const item = v.data()
-        item.id = v.id
-        item.category = v.id.split('-')[0]
-        item.name = v.id.split('-')[1]
-        this.items.push(item)
-      })
-      this.last = sn.docs[sn.docs.length - 1]
-    },
-    async onIntersect (entries, observer, isIntersection) {
+      let sn
       this.loading = true
-      await delay(1500)
-      const sn = await this.$fireStore.collection('docs')
-        .orderBy(this.sortName, 'desc')
-        .startAfter(this.last)
-        .limit(3)
-        .get()
-      sn.docs.forEach((v) => {
-        const item = v.data()
-        item.id = v.id
-        item.category = v.id.split('-')[0]
-        item.name = v.id.split('-')[1]
-        this.items.push(item)
-      })
-      this.last = sn.docs[sn.docs.length - 1]
-      this.loading = false
+      try {
+        if (!this.items.length) {
+          sn = await ref.get()
+        } else {
+          if (!this.last) return
+          sn = await ref.startAfter(this.last).get()
+        }
+        if (!sn.docs.length) {
+          this.last = null
+          return
+        }
+        sn.docs.forEach((v) => {
+          const item = v.data()
+          item.id = v.id
+          item.category = v.id.split('-')[0]
+          item.name = v.id.split('-')[1]
+          this.items.push(item)
+        })
+        this.last = sn.docs[sn.docs.length - 1]
+      } catch (e) {
+        console.error(e.message)
+      } finally {
+        this.loading = false
+      }
+    },
+    onIntersect (entries, observer, isIntersection) {
+      console.log(entries, observer, isIntersection)
+      if (isIntersection) { this.next() }
     }
   }
 }
