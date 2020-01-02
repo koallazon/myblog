@@ -102,9 +102,14 @@ export default {
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'mdi-format-list-bulleted',
+          title: 'list',
+          to: '/list'
+        },
+        {
+          icon: 'mdi-grease-pencil',
+          title: 'write',
+          to: '/write'
         }
       ],
       miniVariant: false,
