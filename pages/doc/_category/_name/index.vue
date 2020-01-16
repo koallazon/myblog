@@ -8,7 +8,7 @@
           <v-icon>mdi-arrow-left</v-icon>
         </v-btn>
       </v-card-title>
-      <v-subheader>{{ meta.description }} / {{ meta.date}}</v-subheader>
+      <v-subheader>{{ meta.description }} / {{ meta.date }}</v-subheader>
       <v-divider />
       <v-card-text v-html="$md.render(doc.text)" />
     </v-card>

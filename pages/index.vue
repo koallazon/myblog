@@ -24,6 +24,13 @@ export default {
     hello () {
       return readMe
     }
+  },
+  async mounted () {
+    // const sn = await this.$fireStore.collection('test').get()
+    // sn.docs.forEach((v) => {
+    //   console.log(v.data())
+    //   this.items.push(v.data())
+    // })
   }
 }
 </script>

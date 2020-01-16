@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-card v-if="user">
             <v-toolbar dense color="success" dark flat>
-                <v-toolbar-title>write {{user.email}}</v-toolbar-title>
+                <v-toolbar-title>write</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="save">
                     <v-icon>mdi-content-save</v-icon>
@@ -15,22 +15,22 @@
                 <v-card-text>
                     <v-row>
                         <v-col cols="12" sm="6">
-                          <v-text-field v-model="docId.category" label='category' outlined/>
+                          <v-text-field v-model="docId.category" label="category" outlined />
                         </v-col>
                         <v-col cols="12" sm="6">
-                          <v-text-field v-model="docId.name" label='name' outlined/>
+                          <v-text-field v-model="docId.name" label="name" outlined />
                         </v-col>
                         <v-col cols="12" sm="6">
-                          <v-text-field v-model="doc.title" label='title' outlined/>
+                          <v-text-field v-model="doc.title" label="title" outlined />
                         </v-col>
                         <v-col cols="12" sm="6">
-                          <v-text-field v-model="doc.date" label='date' outlined/>
+                          <v-text-field v-model="doc.date" label="date" outlined />
                         </v-col>
                         <v-col cols="12">
-                          <v-text-field v-model="doc.description" label='description' outlined/>
+                          <v-text-field v-model="doc.description" label="description" outlined />
                         </v-col>
                         <v-col cols="12">
-                          <v-textarea v-model="content.text" label="content" outlined/>
+                          <v-textarea v-model="content.text" label="content" rows="20" outlined />
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -38,12 +38,13 @@
         </v-card>
         <v-card v-else>
           <v-card-text class="text-center">
-            <v-btn @click="signIn">signIn</v-btn>
+            <v-btn @click="signIn">
+              signIn
+            </v-btn>
           </v-card-text>
         </v-card>
     </v-container>
 </template>
-
 <script>
 export default {
   data () {
@@ -57,10 +58,10 @@ export default {
         title: '',
         date: '',
         description: '',
-        tages: []
+        tags: []
       },
       content: {
-        createAt: new Date(),
+        createdAt: new Date(),
         modifiedAt: new Date(),
         text: ''
       },
@@ -85,7 +86,7 @@ export default {
         const auth = await this.$fireAuth.signInWithPopup(provider)
         this.user = auth.user
       } catch (e) {
-        console.erroe(e.message)
+        console.error(e.message)
       } finally {
         this.loading = false
       }
@@ -96,7 +97,7 @@ export default {
         await this.$fireAuth.signOut()
         this.user = null
       } catch (e) {
-        console.erroe(e.message)
+        console.error(e.message)
       } finally {
         this.loading = false
       }
